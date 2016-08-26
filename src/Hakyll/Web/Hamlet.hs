@@ -16,7 +16,8 @@ import qualified Data.Map as Map
 import Text.Blaze.Html.Renderer.String (renderHtml)
 
 hamlCompiler :: Compiler (Item String)
-hamlCompiler = hamlCompilerWith defaultHamletSettings mempty
+hamlCompiler = 
+  hamlCompilerWith defaultHamletSettings mempty
 
 hamlCompilerWith ::  HamletSettings -> Map.Map Text HamletData -> Compiler (Item String)
 hamlCompilerWith hamletSettings hamletVariables =
@@ -27,7 +28,8 @@ hamlTemplateCompiler =
   hamlTemplateCompilerWith defaultHamletSettings mempty
 
 hamlTemplateCompilerWith :: HamletSettings -> Map.Map Text HamletData -> Compiler (Item Template)
-hamlTemplateCompilerWith hamletSettings hamletVariables = do
+hamlTemplateCompilerWith hamletSettings hamletVariables =
+  cached "Hakyll.Web.Hamlet.hamlTemplateCompiler" $ do
   body <- getResourceBody
   html <- renderHaml hamletSettings hamletVariables body
   return $ readTemplate <$> html
